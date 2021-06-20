@@ -71,7 +71,7 @@ const updateReels = () => {
 }
 
 const resetGame = () => {
-    spin.label = '🎰 Start Over';
+    spin.label = '🎰 New Game';
     jackpot = 5000;
     pot = 1000;
 }
@@ -101,7 +101,7 @@ const finishSpin = () => {
         result.textColor = null
     }
 
-    if (pot < cost {
+    if (pot < cost) {
         result.label = ''
         jackpotLabel.label = '🥺 Game Over! 💸 '
         jackpotLabel.textColor = '#DC3545'
