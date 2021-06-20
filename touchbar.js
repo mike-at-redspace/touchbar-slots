@@ -96,7 +96,7 @@ const finishSpin = () => {
     }
     if (score < 250) {
         result.label = ''
-        jackpotLabel.label = '🥺 Game Over! 💸 💸 💸'
+        jackpotLabel.label = '🥺 Game Over! 💸 '
         jackpotLabel.textColor = '#dc3545'
         spin.label = '🎰 Start Over';
         jackpot = 1000;
@@ -106,7 +106,6 @@ const finishSpin = () => {
         spin.label = '🎰 Spin'
     }
     spinning = false
-    
 }
 
 const touchBar = new TouchBar({
