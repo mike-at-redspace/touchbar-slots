@@ -4,7 +4,7 @@ const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar
 
 let spinning = false
 
-const formatCurrency = (amount) => `$${amount.toFixed(2)}`
+const formatCurrency = (amount) => `$${amount}`
 
 // Reel labels
 const reel1 = new TouchBarLabel()
@@ -15,10 +15,11 @@ const reel3 = new TouchBarLabel()
 const result = new TouchBarLabel()
 const jackpotLabel = new TouchBarLabel()
 
-// Jackpot label
+// Rules
 let jackpot = 1000
-let score = 1000
-
+let pot = 1000
+let cost = 25
+let win = 250
 
 // Spin button
 let spinTimoout = false;
@@ -31,8 +32,9 @@ const spin = new TouchBarButton({
             return finishSpin();
         }
         spinning = true
-        score -= 0.25
-        jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
+        pot -= cost
+        jackpot += cost
+        jackpotLabel.label = `💳 ${formatCurrency(pot)} 💰 ${formatCurrency(jackpot)}`
         jackpotLabel.textColor = null
         result.label = ''
         spin.label = '🛑 Stop'
@@ -70,8 +72,8 @@ const updateReels = () => {
 
 const resetGame = () => {
     spin.label = '🎰 Start Over';
-    jackpot = 50000;
-    score = 1000;
+    jackpot = 5000;
+    pot = 1000;
 }
 
 const finishSpin = () => {
@@ -83,34 +85,32 @@ const finishSpin = () => {
     if (winner && reel1 == '💎') {
         result.label = '💰 Jackpot! You win ' + formatCurrency(jackpot)
         result.textColor = '#FDFF00'
-        score = jackpot
+        pot = jackpot
         jackpot = 0
     } else if (winner) {
-        result.label = '🤑 Winner! You win $500.00'
+        result.label = '🤑 Winner! You win ' + formatCurrency(win)
         result.textColor = '#FDFF00'
-        jackpot -= 500
-        score += 500
+        jackpot -= win
+        pot += win
     } else if (uniqueValues == 2) {
         result.label = '🤔 So Close!'
         result.textColor = null
-        jackpot += 0.25
     } else {
         // No values are the same
         result.label = '🙁 Spin Again'
         result.textColor = null
-        jackpot += 0.25
     }
 
-    if (score < 250) {
+    if (pot < 250) {
         result.label = ''
         jackpotLabel.label = '🥺 Game Over! 💸 '
-        jackpotLabel.textColor = '#dc3545'
+        jackpotLabel.textColor = '#DC3545'
         resetGame();
-    } else if (jackpot < 0) {
-        jackpotLabel.label = `😲 You WON! ${formatCurrency(score)} 💵`
+    } else if (!jackpot) {
+        jackpotLabel.label = `😲 You WON! ${formatCurrency(pot)} 💵`
         resetGame();
     } else {
-        jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
+        jackpotLabel.label = `💳 ${formatCurrency(pot)} 💰 ${formatCurrency(jackpot)}`
         spin.label = '🎰 Spin'
     }
     spinning = false
