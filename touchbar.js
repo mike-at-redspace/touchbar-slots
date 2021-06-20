@@ -101,12 +101,12 @@ const finishSpin = () => {
         result.textColor = null
     }
 
-    if (pot < 250) {
+    if (pot < cost {
         result.label = ''
         jackpotLabel.label = '🥺 Game Over! 💸 '
         jackpotLabel.textColor = '#DC3545'
         resetGame();
-    } else if (!jackpot || jackpot < 0) {
+    } else if (jackpot <= 0) {
         jackpotLabel.label = `😲 You WON! ${formatCurrency(pot)} 💵`
         resetGame();
     } else {
