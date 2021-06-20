@@ -58,7 +58,7 @@ const spin = new TouchBarButton({
 })
 
 const getRandomValue = () => {
-    const values = ['🍒', '💎', '7️⃣', '🍊', '🔔', '⭐', '🍇', '🍀']
+    const values = ['🍒', '💎', '🍋', '🍌', '🍑', '🍇', '🍉']
     return values[Math.floor(Math.random() * values.length)]
 }
 
