@@ -21,20 +21,22 @@ jackpotLabel.label = 'Jackpot ' + formatCurrency(jackpot)
 jackpotLabel.textColor = null
 
 // Spin button
+let spinTimoout = false;
 const spin = new TouchBarButton({
     label: '🎰 Spin',
     backgroundColor: '#7851A9',
     click: () => {
         // Ignore clicks if already spinning
         if (spinning) {
-            return
+            return finishSpin();
         }
 
         spinning = true
         result.label = ''
+        spin.label = '🛑 Stop'
 
         let timeout = 10
-        const spinLength = 4 * 1000 // 4 seconds
+        const spinLength = 10000 // 10 seconds
         const startTime = Date.now()
 
         const spinReels = () => {
@@ -45,7 +47,7 @@ const spin = new TouchBarButton({
             } else {
                 // Slow down a bit on each spin
                 timeout *= 1.1
-                setTimeout(spinReels, timeout)
+                spinTimoout = setTimeout(spinReels, timeout)
             }
         }
 
@@ -65,6 +67,9 @@ const updateReels = () => {
 }
 
 const finishSpin = () => {
+    if (spinTimoout) {
+        clearTimeout(spinTimoout)
+    }
     const uniqueValues = new Set([reel1.label, reel2.label, reel3.label]).size
     const winner = uniqueValues == 1
     if (winner && reel1 == '💎') {
@@ -87,6 +92,7 @@ const finishSpin = () => {
     }
     jackpotLabel.label = 'Jackpot ' + formatCurrency(jackpot)
     spinning = false
+    spin.label = '🎰 Spin';
 }
 
 const touchBar = new TouchBar({
