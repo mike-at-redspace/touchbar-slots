@@ -7,13 +7,13 @@ let spinning = false
 const formatCurrency = (amount) => `$${amount}`
 
 // Reel labels
-const reel1 = new TouchBarLabel()
-const reel2 = new TouchBarLabel()
-const reel3 = new TouchBarLabel()
+const slotA = new TouchBarLabel()
+const slotB = new TouchBarLabel()
+const slotC = new TouchBarLabel()
 
-// Spin result label
-const result = new TouchBarLabel()
-const jackpotLabel = new TouchBarLabel()
+// Spin result labels
+const results = new TouchBarLabel()
+const gameStatus = new TouchBarLabel()
 
 // Rules
 let jackpot = 1000
@@ -23,7 +23,7 @@ let win = 250
 
 // Spin button
 let spinTimoout = false;
-const spin = new TouchBarButton({
+const spinButton = new TouchBarButton({
     label: '🎰 Spin',
     backgroundColor: '#7851A9',
     click: () => {
@@ -34,10 +34,10 @@ const spin = new TouchBarButton({
         spinning = true
         pot -= cost
         jackpot += cost
-        jackpotLabel.label = `💳 ${formatCurrency(pot)} 💰 ${formatCurrency(jackpot)}`
-        jackpotLabel.textColor = null
-        result.label = ''
-        spin.label = '🛑 Stop'
+        gameStatus.label = `💳 ${formatCurrency(pot)} 💰 ${formatCurrency(jackpot)}`
+        gameStatus.textColor = null
+        results.label = ''
+        spinButton.label = '🛑 Stop'
 
         let timeout = 10
         const spinLength = 10000 // 10 seconds
@@ -65,13 +65,13 @@ const getRandomValue = () => {
 }
 
 const updateReels = () => {
-    reel1.label = getRandomValue()
-    reel2.label = getRandomValue()
-    reel3.label = getRandomValue()
+    slotA.label = getRandomValue()
+    slotB.label = getRandomValue()
+    slotC.label = getRandomValue()
 }
 
 const resetGame = () => {
-    spin.label = '🎰 New Game';
+    spinButton.label = '🎰 New Game';
     jackpot = 5000;
     pot = 1000;
 }
@@ -80,56 +80,56 @@ const finishSpin = () => {
     if (spinTimoout) {
         clearTimeout(spinTimoout)
     }
-    const uniqueValues = new Set([reel1.label, reel2.label, reel3.label]).size
+    const uniqueValues = new Set([slotA.label, slotB.label, slotC.label]).size
     const winner = uniqueValues == 1
-    if (winner && reel1 == '💎') {
-        result.label = '💰 Jackpot! You win ' + formatCurrency(jackpot)
-        result.textColor = '#FDFF00'
+    if (winner && slotA.label == '💎') {
+        results.label = '💰 Jackpot! You win ' + formatCurrency(jackpot)
+        results.textColor = '#FDFF00'
         pot = jackpot
         jackpot = 0
     } else if (winner) {
-        result.label = '🤑 Winner! You win ' + formatCurrency(win)
-        result.textColor = '#FDFF00'
+        results.label = '🤑 Winner! You win ' + formatCurrency(win)
+        results.textColor = '#FDFF00'
         jackpot -= win
         pot += win
     } else if (uniqueValues == 2) {
-        result.label = '🤔 So Close!'
-        result.textColor = null
+        results.label = '🤔 So Close!'
+        results.textColor = null
     } else {
         // No values are the same
-        result.label = '🙁 Spin Again'
-        result.textColor = null
+        results.label = '🙁 Spin Again'
+        results.textColor = null
     }
 
     if (pot < cost) {
-        result.label = ''
-        jackpotLabel.label = '🥺 Game Over! 💸 '
-        jackpotLabel.textColor = '#DC3545'
+        results.label = ''
+        gameStatus.label = '🥺 Game Over! 💸 '
+        gameStatus.textColor = '#DC3545'
         resetGame();
     } else if (jackpot <= 0) {
-        jackpotLabel.label = `😲 You WON! ${formatCurrency(pot)} 💵`
-        jackpotLabel.textColor = '#28a745'
+        gameStatus.label = `😲 You WON! ${formatCurrency(pot)} 💵`
+        gameStatus.textColor = '#28a745'
         resetGame();
     } else {
-        jackpotLabel.label = `💳 ${formatCurrency(pot)} 💰 ${formatCurrency(jackpot)}`
-        spin.label = '🎰 Spin'
+        gameStatus.label = `💳 ${formatCurrency(pot)} 💰 ${formatCurrency(jackpot)}`
+        spinButton.label = '🎰 Spin'
     }
     spinning = false
 }
 
 const touchBar = new TouchBar({
     items: [
-        spin,
+        spinButton,
         new TouchBarSpacer({ size: 'large' }),
-        reel1,
+        slotA,
         new TouchBarSpacer({ size: 'small' }),
-        reel2,
+        slotB,
         new TouchBarSpacer({ size: 'small' }),
-        reel3,
+        slotC,
         new TouchBarSpacer({ size: 'large' }),
-        result,
+        results,
         new TouchBarSpacer({ size: 'flexible' }),
-        jackpotLabel,
+        gameStatus,
     ]
 })
 
