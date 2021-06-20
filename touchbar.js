@@ -31,7 +31,7 @@ const spin = new TouchBarButton({
             return finishSpin();
         }
         spinning = true
-        score -= 250
+        score -= 0.25
         jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
         jackpotLabel.textColor = null
         result.label = ''
@@ -68,6 +68,12 @@ const updateReels = () => {
     reel3.label = getRandomValue()
 }
 
+const resetGame = () => {
+    spin.label = '🎰 Start Over';
+    jackpot = 1000;
+    score = 1000;
+}
+
 const finishSpin = () => {
     if (spinTimoout) {
         clearTimeout(spinTimoout)
@@ -82,25 +88,27 @@ const finishSpin = () => {
     } else if (winner) {
         result.label = '🤑 Winner! You win $2,500.00'
         result.textColor = '#FDFF00'
-        jackpot -= 2500
-        score += 2500
+        jackpot -= 500
+        score += 500
     } else if (uniqueValues == 2) {
         result.label = '🤔 So Close!'
         result.textColor = null
-        jackpot += 250
+        jackpot += 0.25
     } else {
         // No values are the same
         result.label = '🙁 Spin Again'
         result.textColor = null
-        jackpot += 250
+        jackpot += 0.25
     }
+
     if (score < 250) {
         result.label = ''
         jackpotLabel.label = '🥺 Game Over! 💸 '
         jackpotLabel.textColor = '#dc3545'
-        spin.label = '🎰 Start Over';
-        jackpot = 1000;
-        score = 1000;
+        resetGame();
+    } else if (jackpot < 0) {
+        jackpotLabel.label = `😲 You WON! ${formatCurrency(score)} 💵`
+        resetGame();
     } else {
         jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
         spin.label = '🎰 Spin'
