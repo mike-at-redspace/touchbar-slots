@@ -70,7 +70,7 @@ const updateReels = () => {
 
 const resetGame = () => {
     spin.label = '🎰 Start Over';
-    jackpot = 1000;
+    jackpot = 50000;
     score = 1000;
 }
 
@@ -86,7 +86,7 @@ const finishSpin = () => {
         score = jackpot
         jackpot = 0
     } else if (winner) {
-        result.label = '🤑 Winner! You win $2,500.00'
+        result.label = '🤑 Winner! You win $500.00'
         result.textColor = '#FDFF00'
         jackpot -= 500
         score += 500
