@@ -4,7 +4,7 @@ const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar
 
 let spinning = false
 
-const formatCurrency = (amount) => `$${amount.toFixed(2)}`;
+const formatCurrency = (amount) => `$${amount.toFixed(2)}`
 
 // Reel labels
 const reel1 = new TouchBarLabel()
@@ -13,13 +13,12 @@ const reel3 = new TouchBarLabel()
 
 // Spin result label
 const result = new TouchBarLabel()
-const jackpotLabel = new TouchBarLabel();
+const jackpotLabel = new TouchBarLabel()
 
 // Jackpot label
-let jackpot = 1000;
-let score = 1000;
-jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
-jackpotLabel.textColor = null
+let jackpot = 1000
+let score = 1000
+
 
 // Spin button
 let spinTimoout = false;
@@ -31,8 +30,10 @@ const spin = new TouchBarButton({
         if (spinning) {
             return finishSpin();
         }
-
         spinning = true
+        score -= 250
+        jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
+        jackpotLabel.textColor = null
         result.label = ''
         spin.label = '🛑 Stop'
 
@@ -87,24 +88,22 @@ const finishSpin = () => {
         result.label = '🤔 So Close!'
         result.textColor = null
         jackpot += 250
-        score -= 250
     } else {
         // No values are the same
         result.label = '🙁 Spin Again'
         result.textColor = null
         jackpot += 250
-        score -= 250
     }
     if (score < 250) {
-        result.label = '💸 Game over!'
-        result.textColor = '#dc3545'
-        jackpotLabel.label = '';
+        result.label = ''
+        jackpotLabel.label = '🥺 Game Over! 💸 💸 💸'
+        jackpotLabel.textColor = '#dc3545'
         spin.label = '🎰 Start Over';
         jackpot = 1000;
         score = 1000;
     } else {
         jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
-        spin.label = '🎰 Spin';
+        spin.label = '🎰 Spin'
     }
     spinning = false
     
