@@ -108,6 +108,7 @@ const finishSpin = () => {
         resetGame();
     } else if (jackpot <= 0) {
         jackpotLabel.label = `😲 You WON! ${formatCurrency(pot)} 💵`
+        jackpotLabel.textColor = '#28a745'
         resetGame();
     } else {
         jackpotLabel.label = `💳 ${formatCurrency(pot)} 💰 ${formatCurrency(jackpot)}`
