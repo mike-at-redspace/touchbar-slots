@@ -4,7 +4,8 @@
   "description": "Taken from the eletron docs",
   "main": "index.js",
   "scripts": {
-    "start": "electron touchbar.js"
+    "start": "electron touchbar.js",
+    "animate": "electron animate.js"
   },
   "keywords": [],
   "author": "",
