@@ -17,7 +17,8 @@ const jackpotLabel = new TouchBarLabel();
 
 // Jackpot label
 let jackpot = 1000;
-jackpotLabel.label = 'Jackpot ' + formatCurrency(jackpot)
+let score = 1000;
+jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
 jackpotLabel.textColor = null
 
 // Spin button
@@ -75,24 +76,38 @@ const finishSpin = () => {
     if (winner && reel1 == '💎') {
         result.label = '💰 Jackpot! You win ' + formatCurrency(jackpot)
         result.textColor = '#FDFF00'
+        score = jackpot
         jackpot = 0
     } else if (winner) {
         result.label = '🤑 Winner! You win $2,500.00'
         result.textColor = '#FDFF00'
         jackpot -= 2500
+        score += 2500
     } else if (uniqueValues == 2) {
         result.label = '🤔 So Close!'
         result.textColor = null
         jackpot += 250
+        score -= 250
     } else {
         // No values are the same
         result.label = '🙁 Spin Again'
         result.textColor = null
         jackpot += 250
+        score -= 250
     }
-    jackpotLabel.label = 'Jackpot ' + formatCurrency(jackpot)
+    if (score < 250) {
+        result.label = '💸 Game over!'
+        result.textColor = '#dc3545'
+        jackpotLabel.label = '';
+        spin.label = '🎰 Start Over';
+        jackpot = 1000;
+        score = 1000;
+    } else {
+        jackpotLabel.label = `💳 ${formatCurrency(score)} 💰 ${formatCurrency(jackpot)}`
+        spin.label = '🎰 Spin';
+    }
     spinning = false
-    spin.label = '🎰 Spin';
+    
 }
 
 const touchBar = new TouchBar({
